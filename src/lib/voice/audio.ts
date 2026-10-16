@@ -7,6 +7,7 @@ export type VoiceProfile = {
   rms: number;
   duration: number;
   envelope: number[];
+  k: number[];
 };
 
 const EPS = 1e-8;
@@ -216,13 +217,14 @@ export function analyzeSamples(samples: Float32Array, sampleRate: number): Voice
     rms,
     duration: mono.length / sampleRate,
     envelope: meanEnvelope(work),
+    k: meanReflection(work, 16000),
   };
 }
 
 export async function analyzeBlob(blob: Blob): Promise<{ profile: VoiceProfile; samples: Float32Array; sampleRate: number }> {
   const buffer = await decodeToBuffer(blob);
   const samples = mixToMono(buffer);
-  const maxSamples = Math.floor(buffer.sampleRate * 20);
+  const maxSamples = Math.floor(buffer.sampleRate * 30);
   const clipped = samples.length > maxSamples ? samples.subarray(0, maxSamples) : samples;
   const profile = analyzeSamples(clipped, buffer.sampleRate);
   return { profile, samples: clipped, sampleRate: buffer.sampleRate };
@@ -346,3 +348,215 @@ export function base64ToBlob(b64: string, mime: string): Blob {
   for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
   return new Blob([bytes], { type: mime });
 }
+
+export async function blobToBase64(blob: Blob): Promise<string> {
+  const buf = await blob.arrayBuffer();
+  const bytes = new Uint8Array(buf);
+  let binary = "";
+  const step = 0x8000;
+  for (let i = 0; i < bytes.length; i += step) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + step));
+  }
+  return btoa(binary);
+}
+
+const LPC_ORDER = 18;
+
+function preemphasize(frame: Float32Array): Float32Array {
+  const out = new Float32Array(frame.length);
+  out[0] = frame[0] ?? 0;
+  for (let i = 1; i < frame.length; i++) {
+    out[i] = (frame[i] ?? 0) - 0.97 * (frame[i - 1] ?? 0);
+  }
+  return out;
+}
+
+function reflectionCoeffs(frame: Float32Array, order: number): number[] {
+  const r = new Float64Array(order + 1);
+  for (let k = 0; k <= order; k++) {
+    let s = 0;
+    for (let n = 0; n < frame.length - k; n++) s += (frame[n] ?? 0) * (frame[n + k] ?? 0);
+    r[k] = s;
+  }
+  if ((r[0] ?? 0) < EPS) return new Array(order).fill(0);
+  const a = new Float64Array(order + 1);
+  a[0] = 1;
+  const k: number[] = [];
+  let e = r[0] ?? 1;
+  for (let i = 1; i <= order; i++) {
+    let lambda = r[i] ?? 0;
+    for (let j = 1; j < i; j++) lambda += (a[j] ?? 0) * (r[i - j] ?? 0);
+    const ki = e === 0 ? 0 : Math.max(-0.99, Math.min(0.99, -lambda / e));
+    k.push(ki);
+    const prev = Float64Array.from(a);
+    a[i] = ki;
+    for (let j = 1; j < i; j++) a[j] = (prev[j] ?? 0) + ki * (prev[i - j] ?? 0);
+    e *= 1 - ki * ki;
+  }
+  return k;
+}
+
+function meanReflection(samples: Float32Array, sampleRate: number, order = LPC_ORDER): number[] {
+  const frame = Math.round(sampleRate * 0.02);
+  const hop = Math.round(frame / 2);
+  const acc = new Float64Array(order);
+  let n = 0;
+  for (let pos = 0; pos + frame < samples.length; pos += hop) {
+    const slice = samples.subarray(pos, pos + frame);
+    let energy = 0;
+    for (let i = 0; i < slice.length; i++) energy += (slice[i] ?? 0) ** 2;
+    if (energy / frame < 0.00035) continue;
+    const k = reflectionCoeffs(preemphasize(slice), order);
+    for (let i = 0; i < order; i++) acc[i] += k[i] ?? 0;
+    n++;
+  }
+  if (!n) return [];
+  return Array.from(acc, (v) => v / n);
+}
+
+function kToA(k: number[]): number[] {
+  const p = k.length;
+  const a = new Array(p + 1).fill(0);
+  a[0] = 1;
+  for (let i = 1; i <= p; i++) {
+    const ki = Math.max(-0.99, Math.min(0.99, k[i - 1] ?? 0));
+    const prev = a.slice(0, i);
+    a[i] = ki;
+    for (let j = 1; j < i; j++) a[j] = (prev[j] ?? 0) + ki * (prev[i - j] ?? 0);
+  }
+  return a;
+}
+
+function firInverse(samples: Float32Array, a: number[]): Float32Array {
+  const p = a.length - 1;
+  const out = new Float32Array(samples.length);
+  for (let n = 0; n < samples.length; n++) {
+    let acc = 0;
+    for (let i = 0; i <= p; i++) acc += (a[i] ?? 0) * (samples[n - i] ?? 0);
+    out[n] = acc;
+  }
+  return out;
+}
+
+function iirSynth(exc: Float32Array, a: number[]): Float32Array {
+  const p = a.length - 1;
+  const out = new Float32Array(exc.length);
+  for (let n = 0; n < exc.length; n++) {
+    let acc = exc[n] ?? 0;
+    for (let i = 1; i <= p; i++) acc -= (a[i] ?? 0) * (out[n - i] ?? 0);
+    if (!Number.isFinite(acc)) acc = 0;
+    out[n] = Math.max(-4, Math.min(4, acc));
+  }
+  return out;
+}
+
+function finitePeak(samples: Float32Array, maxPeak = 12): boolean {
+  let peak = 0;
+  for (let i = 0; i < samples.length; i++) {
+    const v = samples[i] ?? 0;
+    if (!Number.isFinite(v)) return false;
+    peak = Math.max(peak, Math.abs(v));
+  }
+  return peak > 0 && peak < maxPeak;
+}
+
+function wsolaStretch(input: Float32Array, rate: number): Float32Array {
+  if (Math.abs(rate - 1) < 0.02) return input;
+  const frame = 1024;
+  const hopOut = 256;
+  const hopIn = hopOut / rate;
+  const outLen = Math.max(frame, Math.floor(input.length * rate));
+  const out = new Float32Array(outLen + frame);
+  let posIn = 0;
+  let posOut = 0;
+  const search = 80;
+  while (posOut + frame < out.length && posIn + frame < input.length) {
+    let best = Math.round(posIn);
+    let bestCorr = -Infinity;
+    const start = Math.max(0, Math.round(posIn) - search);
+    const end = Math.min(input.length - frame, Math.round(posIn) + search);
+    for (let c = start; c <= end; c += 2) {
+      let corr = 0;
+      for (let i = 0; i < 48; i++) corr += (out[posOut + i] ?? 0) * (input[c + i] ?? 0);
+      if (corr > bestCorr) {
+        bestCorr = corr;
+        best = c;
+      }
+    }
+    for (let i = 0; i < frame; i++) {
+      const w = 0.5 - 0.5 * Math.cos((2 * Math.PI * i) / (frame - 1));
+      out[posOut + i] += (input[best + i] ?? 0) * w;
+    }
+    posIn += hopIn;
+    posOut += hopOut;
+  }
+  return out.subarray(0, Math.min(outLen, Math.max(1, posOut)));
+}
+
+function resampleLinear(input: Float32Array, targetLen: number): Float32Array {
+  if (input.length === targetLen) return input;
+  const out = new Float32Array(targetLen);
+  if (input.length < 2 || targetLen < 1) return out;
+  const step = (input.length - 1) / Math.max(1, targetLen - 1);
+  for (let i = 0; i < targetLen; i++) {
+    const x = i * step;
+    const i0 = Math.floor(x);
+    const i1 = Math.min(input.length - 1, i0 + 1);
+    const t = x - i0;
+    out[i] = (input[i0] ?? 0) * (1 - t) + (input[i1] ?? 0) * t;
+  }
+  return out;
+}
+
+function shiftPitch(samples: Float32Array, ratio: number): Float32Array {
+  const r = Math.max(0.5, Math.min(1.85, ratio));
+  if (Math.abs(r - 1) < 0.03) return samples;
+  if (samples.length > 3_200_000) return samples;
+  const stretched = wsolaStretch(samples, r);
+  return resampleLinear(stretched, samples.length);
+}
+
+function lpcSwap(samples: Float32Array, kSrc: number[], kDst: number[], amount: number): Float32Array {
+  if (!kSrc.length || !kDst.length || amount < 0.08) return samples;
+  const residual = firInverse(samples, kToA(kSrc));
+  const swapped = iirSynth(residual, kToA(kDst));
+  if (!finitePeak(swapped)) return samples;
+  const out = new Float32Array(samples.length);
+  for (let i = 0; i < samples.length; i++) {
+    out[i] = (samples[i] ?? 0) * (1 - amount) + (swapped[i] ?? 0) * amount;
+  }
+  return out;
+}
+
+function normalizePeak(samples: Float32Array, target = 0.96): Float32Array {
+  let peak = EPS;
+  for (let i = 0; i < samples.length; i++) peak = Math.max(peak, Math.abs(samples[i] ?? 0));
+  const g = peak > target ? target / peak : 1;
+  if (g === 1) return samples;
+  const out = new Float32Array(samples.length);
+  for (let i = 0; i < samples.length; i++) out[i] = (samples[i] ?? 0) * g;
+  return out;
+}
+
+export async function convertToClone(
+  blob: Blob,
+  model: Pick<VoiceProfile, "f0" | "envelope" | "k">,
+  sourceF0: number,
+  amount: number,
+): Promise<Blob> {
+  const blend = Math.max(0, Math.min(1, amount));
+  if (blend < 0.05) return blob;
+  const buffer = await decodeToBuffer(blob);
+  let samples = mixToMono(buffer);
+  if (buffer.sampleRate !== 16000) samples = downsample(samples, buffer.sampleRate, 16000);
+  const ratio = (model.f0 || 160) / Math.max(70, sourceF0 || 160);
+  samples = shiftPitch(samples, 1 + (ratio - 1) * blend);
+  if (model.envelope.length >= 8) samples = morphEnvelope(samples, model.envelope, blend * 0.92);
+  if (model.k.length >= 8) {
+    const kSrc = meanReflection(samples, 16000);
+    if (kSrc.length) samples = lpcSwap(samples, kSrc, model.k, blend * 0.7);
+  }
+  samples = normalizePeak(samples);
+  return encodeWav(samples, 16000);
+}
+

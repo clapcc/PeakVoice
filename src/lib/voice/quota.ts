@@ -1,4 +1,4 @@
-const KEY = "nila-quota-v1";
+const KEY = "peakvoice-quota-v1";
 const DAILY_LIMIT = 40;
 
 type Quota = { day: string; count: number };

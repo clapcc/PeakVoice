@@ -1,4 +1,4 @@
-//#region node_modules/.nitro/vite/services/ssr/assets/catalog-4bXJQnxC.js
+//#region node_modules/.nitro/vite/services/ssr/assets/limits-1m5oO2m8.js
 var STUDIO_VOICES = [
 	{
 		id: "en-US-AvaNeural",
@@ -7,8 +7,8 @@ var STUDIO_VOICES = [
 		locale: "en-US",
 		lang: "en",
 		gender: "female",
-		style: "Warm studio",
-		styleMy: "နွေးထွေးသော",
+		style: "Warm",
+		styleMy: "နွေး",
 		typicalF0: 205
 	},
 	{
@@ -18,8 +18,8 @@ var STUDIO_VOICES = [
 		locale: "en-US",
 		lang: "en",
 		gender: "female",
-		style: "Clear narrator",
-		styleMy: "ကြည်လင်သော",
+		style: "Clear",
+		styleMy: "ကြည်",
 		typicalF0: 210
 	},
 	{
@@ -29,31 +29,9 @@ var STUDIO_VOICES = [
 		locale: "en-US",
 		lang: "en",
 		gender: "female",
-		style: "Expressive",
-		styleMy: "စိတ်ခံစားမှု",
+		style: "Live",
+		styleMy: "ရှင်",
 		typicalF0: 215
-	},
-	{
-		id: "en-US-EmmaNeural",
-		name: "Emma",
-		nameMy: "အမ်မာ",
-		locale: "en-US",
-		lang: "en",
-		gender: "female",
-		style: "Soft news",
-		styleMy: "ပျော့ပျောင်း",
-		typicalF0: 200
-	},
-	{
-		id: "en-GB-SoniaNeural",
-		name: "Sonia",
-		nameMy: "ဆိုနီယာ",
-		locale: "en-GB",
-		lang: "en",
-		gender: "female",
-		style: "British",
-		styleMy: "ဗြိတိသျှ",
-		typicalF0: 198
 	},
 	{
 		id: "en-US-AndrewNeural",
@@ -62,8 +40,8 @@ var STUDIO_VOICES = [
 		locale: "en-US",
 		lang: "en",
 		gender: "male",
-		style: "Grounded",
-		styleMy: "တည်ငြိမ်သော",
+		style: "Low",
+		styleMy: "နိမ့်",
 		typicalF0: 118
 	},
 	{
@@ -73,8 +51,8 @@ var STUDIO_VOICES = [
 		locale: "en-US",
 		lang: "en",
 		gender: "male",
-		style: "Bright host",
-		styleMy: "ကြည်လင်သော",
+		style: "Bright",
+		styleMy: "လင်း",
 		typicalF0: 125
 	},
 	{
@@ -84,9 +62,20 @@ var STUDIO_VOICES = [
 		locale: "en-US",
 		lang: "en",
 		gender: "male",
-		style: "Narration",
-		styleMy: "ဇာတ်ကြောင်း",
+		style: "Story",
+		styleMy: "ဇာတ်",
 		typicalF0: 112
+	},
+	{
+		id: "en-GB-SoniaNeural",
+		name: "Sonia",
+		nameMy: "ဆိုနီယာ",
+		locale: "en-GB",
+		lang: "en",
+		gender: "female",
+		style: "UK",
+		styleMy: "ယူကေ",
+		typicalF0: 198
 	},
 	{
 		id: "en-GB-RyanNeural",
@@ -95,8 +84,8 @@ var STUDIO_VOICES = [
 		locale: "en-GB",
 		lang: "en",
 		gender: "male",
-		style: "British",
-		styleMy: "ဗြိတိသျှ",
+		style: "UK",
+		styleMy: "ယူကေ",
 		typicalF0: 115
 	},
 	{
@@ -106,7 +95,7 @@ var STUDIO_VOICES = [
 		locale: "my-MM",
 		lang: "my",
 		gender: "female",
-		style: "Myanmar",
+		style: "MY",
 		styleMy: "မြန်မာ",
 		typicalF0: 210
 	},
@@ -117,7 +106,7 @@ var STUDIO_VOICES = [
 		locale: "my-MM",
 		lang: "my",
 		gender: "male",
-		style: "Myanmar",
+		style: "MY",
 		styleMy: "မြန်မာ",
 		typicalF0: 120
 	},
@@ -128,7 +117,7 @@ var STUDIO_VOICES = [
 		locale: "ja-JP",
 		lang: "ja",
 		gender: "female",
-		style: "Japanese",
+		style: "JP",
 		styleMy: "ဂျပန်",
 		typicalF0: 220
 	},
@@ -139,7 +128,7 @@ var STUDIO_VOICES = [
 		locale: "ja-JP",
 		lang: "ja",
 		gender: "male",
-		style: "Japanese",
+		style: "JP",
 		styleMy: "ဂျပန်",
 		typicalF0: 120
 	},
@@ -150,7 +139,7 @@ var STUDIO_VOICES = [
 		locale: "ko-KR",
 		lang: "ko",
 		gender: "female",
-		style: "Korean",
+		style: "KR",
 		styleMy: "ကိုရီးယား",
 		typicalF0: 225
 	},
@@ -161,7 +150,7 @@ var STUDIO_VOICES = [
 		locale: "ko-KR",
 		lang: "ko",
 		gender: "male",
-		style: "Korean",
+		style: "KR",
 		styleMy: "ကိုရီးယား",
 		typicalF0: 118
 	},
@@ -172,7 +161,7 @@ var STUDIO_VOICES = [
 		locale: "zh-CN",
 		lang: "zh",
 		gender: "female",
-		style: "Mandarin",
+		style: "CN",
 		styleMy: "တရုတ်",
 		typicalF0: 230
 	},
@@ -183,31 +172,9 @@ var STUDIO_VOICES = [
 		locale: "zh-CN",
 		lang: "zh",
 		gender: "male",
-		style: "Mandarin",
+		style: "CN",
 		styleMy: "တရုတ်",
 		typicalF0: 122
-	},
-	{
-		id: "hi-IN-SwaraNeural",
-		name: "Swara",
-		nameMy: "ဆွာရာ",
-		locale: "hi-IN",
-		lang: "hi",
-		gender: "female",
-		style: "Hindi",
-		styleMy: "ဟိန္ဒီ",
-		typicalF0: 215
-	},
-	{
-		id: "hi-IN-MadhurNeural",
-		name: "Madhur",
-		nameMy: "မဒူရ်",
-		locale: "hi-IN",
-		lang: "hi",
-		gender: "male",
-		style: "Hindi",
-		styleMy: "ဟိန္ဒီ",
-		typicalF0: 120
 	},
 	{
 		id: "th-TH-PremwadeeNeural",
@@ -216,7 +183,7 @@ var STUDIO_VOICES = [
 		locale: "th-TH",
 		lang: "th",
 		gender: "female",
-		style: "Thai",
+		style: "TH",
 		styleMy: "ထိုင်း",
 		typicalF0: 218
 	},
@@ -227,9 +194,20 @@ var STUDIO_VOICES = [
 		locale: "th-TH",
 		lang: "th",
 		gender: "male",
-		style: "Thai",
+		style: "TH",
 		styleMy: "ထိုင်း",
 		typicalF0: 118
+	},
+	{
+		id: "hi-IN-SwaraNeural",
+		name: "Swara",
+		nameMy: "ဆွာရာ",
+		locale: "hi-IN",
+		lang: "hi",
+		gender: "female",
+		style: "HI",
+		styleMy: "ဟိန္ဒီ",
+		typicalF0: 215
 	},
 	{
 		id: "id-ID-GadisNeural",
@@ -238,7 +216,7 @@ var STUDIO_VOICES = [
 		locale: "id-ID",
 		lang: "id",
 		gender: "female",
-		style: "Indonesian",
+		style: "ID",
 		styleMy: "အင်ဒို",
 		typicalF0: 210
 	},
@@ -249,7 +227,7 @@ var STUDIO_VOICES = [
 		locale: "vi-VN",
 		lang: "vi",
 		gender: "female",
-		style: "Vietnamese",
+		style: "VN",
 		styleMy: "ဗီယက်နမ်",
 		typicalF0: 215
 	},
@@ -260,7 +238,7 @@ var STUDIO_VOICES = [
 		locale: "es-ES",
 		lang: "es",
 		gender: "female",
-		style: "Spanish",
+		style: "ES",
 		styleMy: "စပိန်",
 		typicalF0: 200
 	},
@@ -271,7 +249,7 @@ var STUDIO_VOICES = [
 		locale: "fr-FR",
 		lang: "fr",
 		gender: "female",
-		style: "French",
+		style: "FR",
 		styleMy: "ပြင်သစ်",
 		typicalF0: 205
 	},
@@ -282,31 +260,9 @@ var STUDIO_VOICES = [
 		locale: "de-DE",
 		lang: "de",
 		gender: "female",
-		style: "German",
+		style: "DE",
 		styleMy: "ဂျာမန်",
 		typicalF0: 195
-	},
-	{
-		id: "pt-BR-FranciscaNeural",
-		name: "Francisca",
-		nameMy: "ဖရန်စစ္စကာ",
-		locale: "pt-BR",
-		lang: "pt",
-		gender: "female",
-		style: "Portuguese",
-		styleMy: "ပေါ်တူဂီ",
-		typicalF0: 205
-	},
-	{
-		id: "ar-SA-ZariyahNeural",
-		name: "Zariyah",
-		nameMy: "ဇာရီယာ",
-		locale: "ar-SA",
-		lang: "ar",
-		gender: "female",
-		style: "Arabic",
-		styleMy: "အာရဗီ",
-		typicalF0: 200
 	}
 ];
 var DEFAULT_VOICE_ID = "en-US-AvaNeural";
@@ -320,5 +276,37 @@ function pickCloneVoice(lang, gender) {
 	if (byLang[0]) return byLang[0];
 	return STUDIO_VOICES.find((v) => v.lang === "en" && v.gender === gender) ?? STUDIO_VOICES[0];
 }
+function xaiVoiceFor(gender) {
+	return gender === "female" ? "eve" : "leo";
+}
+var MAX_CHARS = 1e4;
+var CHUNK_CHARS = 2500;
+function splitScript(text, max = CHUNK_CHARS) {
+	const trimmed = text.replace(/\s+/g, " ").trim();
+	if (!trimmed) return [];
+	if (trimmed.length <= max) return [trimmed];
+	const parts = [];
+	const pieces = trimmed.split(/(?<=[။!?。！？.!?])\s+/);
+	let buf = "";
+	const flush = () => {
+		const next = buf.trim();
+		if (next) parts.push(next);
+		buf = "";
+	};
+	for (const piece of pieces) {
+		if (piece.length > max) {
+			flush();
+			for (let i = 0; i < piece.length; i += max) parts.push(piece.slice(i, i + max));
+			continue;
+		}
+		const joined = buf ? `${buf} ${piece}` : piece;
+		if (joined.length > max) {
+			flush();
+			buf = piece;
+		} else buf = joined;
+	}
+	flush();
+	return parts;
+}
 //#endregion
-export { voiceById as i, STUDIO_VOICES as n, pickCloneVoice as r, DEFAULT_VOICE_ID as t };
+export { pickCloneVoice as a, xaiVoiceFor as c, STUDIO_VOICES as i, DEFAULT_VOICE_ID as n, splitScript as o, MAX_CHARS as r, voiceById as s, CHUNK_CHARS as t };

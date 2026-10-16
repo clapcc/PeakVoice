@@ -3,7 +3,7 @@ import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import appCss from "../styles.css?url";
 
-const APP_NAME = "Nila";
+const APP_NAME = "PeakVoice";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -11,10 +11,10 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: APP_NAME },
-      { name: "theme-color", content: "#07080c" },
+      { name: "theme-color", content: "#000000" },
       {
         name: "description",
-        content: "Free voice cloning studio. Record a sample, type any words, hear them spoken in that voice.",
+        content: "PeakVoice — clone a voice, type anything, hear it spoken.",
       },
     ],
     links: [

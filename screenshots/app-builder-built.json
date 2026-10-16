@@ -1,0 +1,38 @@
+{
+  "url": "http://127.0.0.1:8081/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "PeakVoice",
+      "hasCanvas": false,
+      "bodyTextLen": 202,
+      "bodyTextHash": "21d4148ac790608d59db7a173c74c5288d512ee21d7853511dbe17a083472a7e",
+      "bodyTextPrefix": "PeakVoice EN မြန်မာ Record Upload Clone I own this voice Sample ",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "PeakVoice",
+      "hasCanvas": false,
+      "bodyTextLen": 197,
+      "bodyTextHash": "0ca65eeb6fffa3eb41c3d74200fe1a70e0f4d712246aac3f4895b4586788e2f9",
+      "bodyTextPrefix": "PeakVoice EN မြန်မာ Record Upload Clone I own this voice Sample ",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-built.json",
+  "divergesFromBaseline": false,
+  "baselineReasons": []
+}

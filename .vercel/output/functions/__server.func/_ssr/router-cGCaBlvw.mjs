@@ -3,8 +3,8 @@ import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].
 import { _ as lazyRouteComponent, b as useRouter, f as Scripts, g as Outlet, h as createRouter, p as HeadContent, v as createFileRoute, x as require_jsx_runtime, y as createRootRoute } from "../_libs/@tanstack/react-router+[...].mjs";
 import { r as TriangleAlert } from "../_libs/lucide-react.mjs";
 import { a as union, i as string, n as number, r as object, t as literal } from "../_libs/zod.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-CdFiYY6F.js
-var router_CdFiYY6F_exports = /* @__PURE__ */ __exportAll({ getRouter: () => getRouter });
+//#region node_modules/.nitro/vite/services/ssr/assets/router-cGCaBlvw.js
+var router_cGCaBlvw_exports = /* @__PURE__ */ __exportAll({ getRouter: () => getRouter });
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var FALLBACK_MESSAGE = "An unexpected error occurred. Try reloading the page.";
@@ -298,8 +298,8 @@ function PreviewHostBridge() {
 	}, [router]);
 	return null;
 }
-var styles_default = "/assets/styles-DimLnr8b.css";
-var APP_NAME = "Nila";
+var styles_default = "/assets/styles-BoxBZMaC.css";
+var APP_NAME = "PeakVoice";
 var Route$1 = createRootRoute({
 	head: () => ({
 		meta: [
@@ -311,11 +311,11 @@ var Route$1 = createRootRoute({
 			{ title: APP_NAME },
 			{
 				name: "theme-color",
-				content: "#07080c"
+				content: "#000000"
 			},
 			{
 				name: "description",
-				content: "Free voice cloning studio. Record a sample, type any words, hear them spoken in that voice."
+				content: "PeakVoice — clone a voice, type anything, hear it spoken."
 			}
 		],
 		links: [
@@ -365,7 +365,7 @@ var Route$1 = createRootRoute({
 		})]
 	})
 });
-var $$splitComponentImporter = () => import("./routes-BcmmeCsd.mjs");
+var $$splitComponentImporter = () => import("./routes-DJPQA314.mjs");
 var rootRouteChildren = { IndexRoute: createFileRoute("/")({ component: lazyRouteComponent($$splitComponentImporter, "component") }).update({
 	id: "/",
 	path: "/",
@@ -379,4 +379,4 @@ function getRouter() {
 	});
 }
 //#endregion
-export { getRouter, router_CdFiYY6F_exports as t };
+export { getRouter, router_cGCaBlvw_exports as t };
